@@ -1,4 +1,5 @@
 import { appWithTranslation } from 'next-i18next'
+import './global.scss'
 
 function MyApp({ Component, pageProps }: any) {
   return (
