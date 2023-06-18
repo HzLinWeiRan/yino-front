@@ -1,4 +1,4 @@
-import { appWithTranslation } from "next-i18next";
+import { appWithTranslation } from 'next-i18next'
 
 function MyApp({ Component, pageProps }: any) {
   return (
