@@ -1,0 +1,21 @@
+@mixin light() {
+  --main-bg-color: #fff;
+}
+@mixin dark() {
+  --main-bg-color: #000;
+}
+
+:root {
+  @include light()
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    @include dark()
+  }
+}
+[data-theme=light] {
+  @include light()
+}
+[data-theme=dark] {
+  @include dark()
+}

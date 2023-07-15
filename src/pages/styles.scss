@@ -1,0 +1,40 @@
+@import 'bootstrap/dist/css/bootstrap.min.css';
+@import 'mixins';
+@import 'color.scss';
+
+.hidden {
+  display: none;
+}
+
+@each $name in map-keys($grid-breakpoints) {
+  @include media-breakpoint-up($name) {
+    .hidden-#{$name}-up {
+      display: none !important;
+    }
+  }
+  @include media-breakpoint-down($name) {
+    .hidden-#{$name}-down {
+      display: none !important;
+    }
+  }
+}
+
+:root {
+  font-family: var(--cui-font-sans-serif);
+  line-height: 1.5;
+  font-weight: 400;
+
+  color-scheme: light dark;
+
+  // --cui-gutter-x: 0 !important;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  background: var(--main-bg-color);
+}
