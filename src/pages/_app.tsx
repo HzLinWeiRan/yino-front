@@ -12,12 +12,17 @@ type Messages = Record<string, string>
 let cacheMessages: Messages
 let cacheMessagesExpiration: number = Date.now()
 
-
-function MyApp({ Component, pageProps, messages }: AppProps & { messages: Messages }) {
+function MyApp({
+  Component,
+  pageProps,
+  messages,
+}: AppProps & { messages: Messages }) {
   const router = useRouter()
   useEffect(() => {
-    Cookies.set('locale', router.locale as string)
-  }, [])
+    if (router.locale) {
+      Cookies.set('locale', router.locale)
+    }
+  }, [router.locale])
   return (
     <IntlProvider messages={messages} locale={router.locale ?? 'en'}>
       <Head>
@@ -31,12 +36,13 @@ function MyApp({ Component, pageProps, messages }: AppProps & { messages: Messag
   )
 }
 
-
 MyApp.getInitialProps = async (
   context: AppContext
-): Promise<AppInitialProps & {
-  messages: Messages
-}> => {
+): Promise<
+  AppInitialProps & {
+    messages: Messages
+  }
+> => {
   const ctx = await App.getInitialProps(context)
   if (context.router.locale) {
     Cookies.set('locale', context.router.locale)
@@ -44,17 +50,17 @@ MyApp.getInitialProps = async (
   if (!cacheMessages || cacheMessagesExpiration < Date.now()) {
     cacheMessages = flattenObject({
       app: {
-        'welcome': '今天',
-        'welcome2': '今天',
+        welcome: '今天',
+        welcome2: '今天',
       },
-      welcome: '欢迎'
+      welcome: '欢迎',
     })
     console.log(cacheMessages)
     cacheMessagesExpiration = Date.now() + 1000 * 60
   }
   return {
     ...ctx,
-    messages: cacheMessages
+    messages: cacheMessages,
   }
 }
 

@@ -6,18 +6,15 @@ import { useTranslation } from 'next-i18next'
 import { serverSideTranslations } from 'next-i18next/serverSideTranslations'
 import { FormattedMessage, useIntl } from 'react-intl'
 
-
 function Page({ res }: { res: API.IData }) {
   const { t } = useTranslation()
   const intl = useIntl()
   const router = useRouter()
   return (
     <div>
-      <FormattedMessage
-        id="app.welcome"
-      />
-      {intl.formatMessage({id: 'welcome'})}
-      {intl.formatMessage({id: 'app.welcome'})}
+      <FormattedMessage id="app.welcome" />
+      {intl.formatMessage({ id: 'welcome' })}
+      {intl.formatMessage({ id: 'app.welcome' })}
       {router.locale}
     </div>
   )

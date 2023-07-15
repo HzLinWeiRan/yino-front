@@ -26,11 +26,11 @@ function Page() {
     pageNum: 1,
     pageSize: 10,
   })
-  const initData = async () => {
-    const res = await getItemSkuListByUrl(data)
-    console.log(res)
-  }
   useEffect(() => {
+    const initData = async () => {
+      const res = await getItemSkuListByUrl(data)
+      console.log(res)
+    }
     initData()
   }, [])
   return (
