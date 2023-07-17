@@ -7,16 +7,15 @@ import Head from 'next/head'
 import { IntlProvider } from 'react-intl'
 import { flattenObject } from '@/utils/flattenObject'
 
-type Messages = Record<string, string>
+type Messages = Record<string, Record<string, string>>
+type AppOwnProps = {
+  messages: Messages
+}
 
 let cacheMessages: Messages
 let cacheMessagesExpiration: number = Date.now()
 
-function MyApp({
-  Component,
-  pageProps,
-  messages,
-}: AppProps & { messages: Messages }) {
+function MyApp({ Component, pageProps, messages }: AppProps & AppOwnProps) {
   const router = useRouter()
   useEffect(() => {
     if (router.locale) {
@@ -24,7 +23,10 @@ function MyApp({
     }
   }, [router.locale])
   return (
-    <IntlProvider messages={messages} locale={router.locale ?? 'en'}>
+    <IntlProvider
+      messages={messages[router.locale ?? 'en']}
+      locale={router.locale ?? 'en'}
+    >
       <Head>
         <meta
           name="viewport"
@@ -38,33 +40,53 @@ function MyApp({
 
 MyApp.getInitialProps = async (
   context: AppContext
-): Promise<
-  AppInitialProps & {
-    messages: Messages
-  }
-> => {
-  const ctx = await App.getInitialProps(context)
+): Promise<AppInitialProps & AppOwnProps> => {
+  const appProps = await App.getInitialProps(context)
   if (context.router.locale) {
     Cookies.set('locale', context.router.locale)
   }
   if (!cacheMessages || cacheMessagesExpiration < Date.now()) {
-    cacheMessages = flattenObject({
-      app: {
-        welcome: '今天',
-        welcome2: '今天',
+    const msg: Record<string, Record<string, any>> = {
+      en: {
+        app: {
+          welcome: '今天en',
+          welcome2: '今天en',
+        },
+        welcome: '欢迎',
       },
-      welcome: '欢迎',
-    })
+      zh: {
+        app: {
+          welcome: '今天',
+          welcome2: '今天',
+        },
+        welcome: '欢迎',
+      },
+      es: {
+        app: {
+          welcome: '今天es',
+          welcome2: '今天es',
+        },
+        welcome: '欢迎',
+      },
+      ko: {
+        app: {
+          welcome: '今天ko',
+          welcome2: '今天ko',
+        },
+        welcome: '欢迎',
+      },
+    }
+    cacheMessages = {}
+    for (const lng in msg) {
+      cacheMessages[lng as string] = flattenObject(msg[lng])
+    }
     console.log(cacheMessages)
     cacheMessagesExpiration = Date.now() + 1000 * 60
   }
   return {
-    ...ctx,
+    ...appProps,
     messages: cacheMessages,
   }
 }
 
-// console.log(nextI18nConfig)
-// export default MyApp
 export default MyApp
-// export default MyApp

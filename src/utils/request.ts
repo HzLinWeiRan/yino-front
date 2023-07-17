@@ -61,7 +61,6 @@ export async function post<T>(
     const response: HttpResponse<T> = await instance.post(url, config)
     return response.data
   } catch (error: any) {
-    console.log(error.message)
     throw error
   }
 }

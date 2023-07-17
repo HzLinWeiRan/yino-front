@@ -1,18 +1,26 @@
-import { GetStaticPaths } from 'next'
+import { useUser } from '@/hooks/hooks'
+import {
+  conversionDateTime,
+  conversionUtcDateTime,
+} from '@/utils/dateTimeHelper'
 import { useRouter } from 'next/router'
 import { FormattedMessage, useIntl } from 'react-intl'
 
 function Page({ res }: { res: API.IData }) {
   const intl = useIntl()
   const router = useRouter()
-  console.log(res)
+  const user = useUser()
   return (
     <div>
       <FormattedMessage id="app.welcome" />
       {intl.formatMessage({ id: 'welcome' })}
-      {intl.formatMessage({ id: 'app.welcome' })}
       {router.locale}
       {res?.url}
+      <br />
+      {conversionDateTime('2023-07-17 09:49:53')}
+      <br />
+      {conversionUtcDateTime('2023-07-17 09:49:53')}
+      <br />
     </div>
   )
 }
@@ -34,19 +42,5 @@ export const getStaticProps = async ({
   }
 }
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {
-    paths: [
-      {
-        params: {
-          key: '111',
-        },
-        locale: 'zh',
-      }, // See the "paths" section below
-    ],
-    // paths: [],
-    fallback: true,
-  }
-}
-
 export default Page
+// export default Page
